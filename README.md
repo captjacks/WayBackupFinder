@@ -4,6 +4,8 @@
 
 This Python script fetches URLs from the Wayback Machine and filters them based on specified file extensions. It also checks if archived snapshots are available for each URL and saves the filtered URLs to files.
 
+Read more: <a href="https://anmolksachan.medium.com/unlock-hidden-backups-with-waybackupfinder-py-7b98041a82d9" target="_blank">Medium</a>
+
 ## Features
 
 - Fetches URLs from the Wayback Machine using the CDX API.
@@ -56,6 +58,7 @@ python wayBackupFinder.py
    - Check if archived snapshots are available for each URL.
 
 ## Example
+![image](https://github.com/user-attachments/assets/4a7652dd-7c43-42aa-a9f0-94f7207dca60)
 
 ### Input:
 
