@@ -23,8 +23,17 @@ def load_extensions_from_file(file_path='extensions.txt'):
         print(colored(f"{file_path} not found. Proceeding with no extensions.", "red"))
         return []
 
+def load_domains_from_file(file_path):
+    try:
+        with open(file_path, 'r') as f:
+            domains = [line.strip() for line in f.readlines() if line.strip()]
+        return domains
+    except FileNotFoundError:
+        print(colored(f"{file_path} not found. Exiting.", "red"))
+        exit()
+
 def fetch_urls(target, file_extensions):
-    print("\nFetching URLs from The Time Machine Lite...")
+    print(f"\nFetching URLs from The Time Machine Lite for {target}...")
     archive_url = f'https://web.archive.org/cdx/search/cdx?url=*.{target}/*&output=txt&fl=original&collapse=urlkey'
     
     try:
@@ -83,14 +92,32 @@ def save_urls(target, extension_stats, file_suffix="_filtered_urls.txt"):
     
     return all_filtered_urls
 
+def process_domain(target, file_extensions):
+    extension_stats = fetch_urls(target, file_extensions)
+    all_filtered_urls = save_urls(target, extension_stats)
+    for url in all_filtered_urls:
+        check_wayback_snapshot(url)
+
 if __name__ == "__main__":
     init()
-    print(colored('    Coded with Love by Anmol K Sachan @Fr13ND0x7f\n','green'))
+    print(colored('    Coded with Love by Anmol K Sachan @Fr13ND0x7f\n', 'green'))
 
-    # Input: Target domain and file extensions
-    target = input("\nEnter the target domain (e.g., example.com): ").strip()
-    if not target:
-        print(colored("Target domain is required. Exiting.", "red"))
+    # Input: Single or multiple domains
+    mode = input("Select mode (1: Single Domain, 2: Multiple Domains): ").strip()
+    if mode == "1":
+        # Single Domain
+        target = input("\nEnter the target domain (e.g., example.com): ").strip()
+        if not target:
+            print(colored("Target domain is required. Exiting.", "red"))
+            exit()
+        domains = [target]
+    elif mode == "2":
+        # Multiple Domains
+        domain_file = input("\nEnter the path to the file containing domain list: ").strip()
+        domains = load_domains_from_file(domain_file)
+        print(f"Loaded {len(domains)} domains from {colored(domain_file, 'green')}.")
+    else:
+        print(colored("Invalid choice. Exiting.", "red"))
         exit()
 
     # Load default extensions from file
@@ -112,19 +139,10 @@ if __name__ == "__main__":
         print(colored("No extensions found. Exiting.", "red"))
         exit()
 
-    # Fetch and filter URLs
-    extension_stats = fetch_urls(target, file_extensions)
+    # Process each domain
+    for target in domains:
+        print(colored(f"\nProcessing domain: {target}", "blue"))
+        process_domain(target, file_extensions)
 
-    # Save filtered URLs
-    all_filtered_urls = save_urls(target, extension_stats)
+    print(colored("\nProcess complete for all domains.", "green"))
 
-    # Check Wayback snapshots for each URL
-    for url in all_filtered_urls:
-        check_wayback_snapshot(url)
-
-    # Print final stats
-    print(colored("\nProcess complete.", "green"))
-    total_urls = sum(len(urls) for urls in extension_stats.values())
-    print(f"\nTotal URLs found: {total_urls}")
-    if total_urls == 0:
-        print(colored("No URLs matched the specified extensions.", "yellow"))
