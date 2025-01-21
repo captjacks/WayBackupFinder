@@ -38,7 +38,7 @@ The script attempts to retrieve URLs from the Wayback Machine. For each URL foun
 You can install the required packages using the following command:
 
 ```bash
-pip install requests colorama termcolor
+pip3 install requests colorama termcolor
 ```
 
 ## How to Use
