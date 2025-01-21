@@ -87,4 +87,4 @@ The script will create a folder called `content` and store the filtered URLs for
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://raw.githubusercontent.com/anmolksachan/WayBackupFinder/refs/heads/main/LICENSE) file for details.
